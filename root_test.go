@@ -9,9 +9,9 @@ import (
 
 // TestRootHTTP Handler
 func TestRootHandler(t *testing.T) {
-	ts := httptest.NewServer(RootHTTP("./html", http.FileServer(http.Dir("./"))))
+	ts := httptest.NewServer(RootHTTP(".", http.FileServer(http.Dir("./html"))))
 	defer ts.Close()
-	res, err := http.Get(ts.URL + "/index.html")
+	res, err := http.Get(ts.URL)
 	if err != nil {
 		t.Fatal(err)
 	}
