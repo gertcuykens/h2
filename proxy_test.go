@@ -10,12 +10,12 @@ import (
 
 // TestGoHTTP Handler
 func TestGoHTTP(t *testing.T) {
-	ts1 := httptest.NewServer(http.FileServer(http.Dir("./test")))
+	ts1 := httptest.NewServer(http.FileServer(http.Dir("./httx_test")))
 	defer ts1.Close()
 	u, _ := url.Parse(ts1.URL)
 	ts2 := httptest.NewServer(GoHTTP(u, http.FileServer(http.Dir("./"))))
 	defer ts2.Close()
-	res, err := http.Get(ts2.URL + "/index.go")
+	res, err := http.Get(ts2.URL + "/httx_test.go")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -29,7 +29,7 @@ func TestGoHTTP(t *testing.T) {
 
 // TestGoFunc HandlerFunc
 func TestGoFunc(t *testing.T) {
-	ts := httptest.NewServer(http.FileServer(http.Dir("./test")))
+	ts := httptest.NewServer(http.FileServer(http.Dir("./httx_test")))
 	defer ts.Close()
 	req := httptest.NewRequest("GET", ts.URL+"/index.html", nil)
 	w := httptest.NewRecorder()
