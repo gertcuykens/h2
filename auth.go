@@ -23,3 +23,19 @@ func Auth(id string, salt string) string {
 	sum := sha256.Sum256([]byte(id + salt))
 	return base64.StdEncoding.EncodeToString(sum[:])
 }
+
+// example
+func secureGET(fn http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		switch r.Method {
+		case "GET":
+			fn(w, r)
+			return
+		}
+		if r.Header.Get("Authorization") != "secret" { // r.FormValue("p")
+			http.Error(w, "Unauthorized!", http.StatusUnauthorized)
+			return
+		}
+		fn(w, r)
+	}
+}

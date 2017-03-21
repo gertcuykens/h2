@@ -20,7 +20,7 @@ func GoHTTP(u *url.URL, h http.Handler) http.Handler {
 func GoFunc(u *url.URL, fn http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if strings.Index(r.URL.Path, ".go") == -1 && strings.Index(r.URL.Path, ".csv") == -1 {
-			fmt.Printf("%s\n", r.URL.Path)
+			// fmt.Printf("%s\n", r.URL.Path)
 			fn(w, r)
 			return
 		}
