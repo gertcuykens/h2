@@ -19,10 +19,6 @@ func (CakeBaker) BakeIt(n int, msg *string) error {
 	return nil
 }
 
-type Args struct {
-	A, B int
-}
-
 func ExampleCodec() {
 	srv := rpc.NewServer()
 	srv.Register(new(CakeBaker))
