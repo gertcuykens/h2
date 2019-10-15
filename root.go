@@ -1,4 +1,4 @@
-package httx
+package h2
 
 import (
 	"net/http"
