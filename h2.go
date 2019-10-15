@@ -10,8 +10,8 @@ import (
 	"time"
 )
 
-// S erver
-func S(srv *http.Server) {
+// Run server
+func Run(srv *http.Server) {
 	go func(srv *http.Server) {
 		var err error
 		if srv.TLSConfig != nil {
