@@ -34,6 +34,7 @@ func ExamplePost() {
 	ts.Close()
 
 	// Output:
+	// shutdown
 	// map[test:[a b]]
 	// map[status:ok]
 	// "test field value"
