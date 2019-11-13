@@ -75,11 +75,11 @@ func d3(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "%q", dump)
 }
 
-func jsonResponse(w http.ResponseWriter, d interface{}, c int) {
+func jsonResponse(w http.ResponseWriter, v interface{}, c int) {
 	if c != http.StatusOK {
-		fmt.Fprintf(os.Stderr, "%d - %+v\n", c, d)
+		fmt.Fprintf(os.Stderr, "%d - %+v\n", c, v)
 	}
-	j, err := json.MarshalIndent(d, "", "\t")
+	j, err := json.MarshalIndent(v, "", "\t")
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "500 - ", err)
 		w.Header().Set("Content-Type", "text/plain; charset=UTF-8")
