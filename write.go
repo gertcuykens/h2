@@ -76,22 +76,17 @@ func d3(w http.ResponseWriter, r *http.Request) {
 }
 
 func jsonResponse(w http.ResponseWriter, d interface{}, c int) {
+	if c != http.StatusOK {
+		fmt.Fprintf(os.Stderr, "%d - %+v\n", c, d)
+	}
 	j, err := json.MarshalIndent(d, "", "\t")
 	if err != nil {
-		http.Error(w, "Error marshal JSON response", http.StatusInternalServerError)
+		fmt.Fprintln(os.Stderr, "500 - ", err)
+		w.Header().Set("Content-Type", "text/plain; charset=UTF-8")
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(c)
 	w.Write(j)
-}
-
-func jsonStreamResponse(w http.ResponseWriter, d io.Reader, c int) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(c)
-	enc := json.NewEncoder(w)
-	enc.SetIndent("", "\t")
-	err := enc.Encode(d)
-	if err != nil {
-		http.Error(w, "Error encode JSON response", http.StatusInternalServerError)
-	}
 }
