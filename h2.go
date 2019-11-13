@@ -33,5 +33,4 @@ func Run(srv *http.Server) {
 	if err != nil {
 		fmt.Fprint(os.Stderr, err, "\n")
 	}
-	fmt.Printf("\nshutdown\n")
 }
