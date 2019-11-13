@@ -54,7 +54,7 @@ func Errorf(w http.ResponseWriter, error string, code int) {
 func d1(w http.ResponseWriter, r *http.Request) {
 	printb(http.MaxBytesReader(w, r.Body, 1024))
 	w.Header().Set("Content-Type", "application/json")
-	fmt.Fprintf(w, "%s", `{"code":200,"status":"OK"}`)
+	io.WriteString(w, `{"code":200,"status":"OK"}`)
 }
 
 func d2(w http.ResponseWriter, r *http.Request) {
@@ -63,7 +63,7 @@ func d2(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("%+v\n", r.MultipartForm)
 
 	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte(`{"status":"ok"}`))
+	io.WriteString(w, `{"status":"ok"}`)
 }
 
 func d3(w http.ResponseWriter, r *http.Request) {
@@ -79,14 +79,14 @@ func jsonResponse(w http.ResponseWriter, v interface{}, c int) {
 	if c != http.StatusOK {
 		fmt.Fprintf(os.Stderr, "%d - %+v\n", c, v)
 	}
+	w.Header().Set("Content-Type", "application/json")
 	j, err := json.MarshalIndent(v, "", "\t")
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "500 - ", err)
-		w.Header().Set("Content-Type", "text/plain; charset=UTF-8")
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintf(w, "%q", err)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(c)
 	w.Write(j)
 }
