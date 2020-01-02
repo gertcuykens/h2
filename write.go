@@ -75,7 +75,7 @@ func d3(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "%q", dump)
 }
 
-func jsonResponse(w http.ResponseWriter, v interface{}, c int) {
+func JsonResponse(w http.ResponseWriter, v interface{}, c int) {
 	if c != http.StatusOK {
 		fmt.Fprintf(os.Stderr, "%d - %+v\n", c, v)
 	}
