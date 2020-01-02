@@ -5,22 +5,15 @@ import (
 	"net/http"
 )
 
-func BasicAuth(handler http.HandlerFunc, username, password, realm string) http.HandlerFunc {
-
+func BasicAuth(fn http.HandlerFunc, usr, pwd string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
-		usr, pwd, ok := r.BasicAuth()
-
-		if !ok ||
-			subtle.ConstantTimeCompare([]byte(usr), []byte(username)) != 1 ||
-			subtle.ConstantTimeCompare([]byte(pwd), []byte(password)) != 1 {
-			w.Header().Set("WWW-Authenticate", `Basic realm="`+realm+`"`)
-			// jsonResponse(w, "Unauthorised", http.StatusUnauthorized)
+		u, p, ok := r.BasicAuth()
+		if !ok || subtle.ConstantTimeCompare([]byte(usr+pwd), []byte(u+p)) != 1 {
+			w.Header().Set("WWW-Authenticate", `Basic realm="`+r.Referer()+`"`)
 			w.WriteHeader(http.StatusUnauthorized)
-			w.Write([]byte("Unauthorised.\n"))
+			w.Write([]byte(`"unauthorised"`))
 			return
 		}
-
-		handler(w, r)
+		fn(w, r)
 	}
 }
